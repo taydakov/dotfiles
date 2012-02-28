@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ $# -lt 1 ]]; then
+  echo "No arguments! Format is: \""`basename $0`" <path> <commands>\". Terminating..."
+  exit 1
+fi
+
+dir="$1"
+shift
+
+echo "$( cd "$dir" && git "$@" )"
