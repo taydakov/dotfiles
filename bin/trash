@@ -1,0 +1,53 @@
+#!/bin/bash
+
+function unix_trash() {
+  WHOIAM=`whoami`
+  if [[ ! -d "/tmp/trash" ]]; then
+    mkdir -p "/tmp/trash~$WHOIAM/"
+  fi
+  for arg in "$@"; do
+    if [[ -e "$arg" ]]; then
+      mv "$arg" "/tmp/trash~$WHOIAM/"
+    else
+      echo "File \"$arg\" couldn't be found!"
+    fi
+  done
+}
+
+function osx_trash() {
+  for arg in "$@"; do
+    if [[ -e "$arg" ]]; then
+      osascript -e "tell application \"Finder\" to delete ((POSIX file \"$arg\") as alias)" > /dev/null 2>&1
+    else
+      echo "File \"$arg\" couldn't be found!"
+    fi
+  done
+}
+
+if [[ `which osascript` != "/usr/bin/osascript" ]]; then
+  # This Unix is not OS X, move to /tmp/trash/
+  unix_trash "$@"
+  echo "Files moved to /tmp/trash~$WHOIAM/"
+else
+  if [[ `whoami` == "root" ]]; then
+    # OS X super users don't have a trash can, auto-select another user's
+    TRASH_USER=`find /Users -maxdepth 2 -regex ".*/\.Trash"`
+    TRASH_USER=${TRASH_USER%%/.Trash*}
+    TRASH_USER=${TRASH_USER#/Users/}
+    echo "The super user on OS X doesn't have a trash can, using $TRASH_USER's trash"
+    for arg in "$@"; do
+      if [[ -e "$arg" ]]; then
+        mv "$arg" "/Users/$TRASH_USER/.Trash/"
+      else
+        echo "File \"$arg\" couldn't be found!"
+      fi
+    done
+    if [[ -n "$@" ]]; then
+      # afplay "/System/Library/Components/CoreAudio.component/Contents/Resources/SystemSounds/dock/drag to trash.aif" &
+      $( afplay "/System/Library/Components/CoreAudio.component/Contents/Resources/SystemSounds/dock/drag to trash.aif" & )
+      # chown -R "$TRASH_USER" "/Users/$TRASH_USER/.Trash/"
+    fi
+  else
+    osx_trash "$@"
+  fi
+fi
