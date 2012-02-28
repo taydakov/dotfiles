@@ -4,7 +4,7 @@ else
   export IS_INTERACTIVE=false
 fi
 
-if [[ -z $SSH_CONNECTION ]]; then
+if [[ -z $SSH_CONNECTION ]] && [[ ($HOSTNAME =~ "\.local(?:host)?$") || (! $HOSTNAME =~ "\.") ]]; then
   export IS_REMOTE=false
 else
   export IS_REMOTE=true
@@ -20,9 +20,22 @@ export CLICOLOR=1
 if [ "$OS" = "linux" ] ; then
   alias ls='ls --color=auto' # For linux, etc
   # ls colors, see: http://www.linux-sxs.org/housekeeping/lscolors.html
-  export LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rb=90'  #LS_COLORS is not supported by the default ls command in OS-X
+#  export LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rb=90'  #LS_COLORS is not supported by the default ls command in OS-X
+  export LS_COLORS='di=1;36:fi=0:ln=35:pi=5;33:so=5;32:bd=5;34;46:cd=5;34;43:or=5;31;40:mi=31;40:ex=31:*.rb=90'  #LS_COLORS is not supported by the default ls command in OS-X
 else
   alias ls='ls -G'  # OS-X SPECIFIC - the -G command in OS-X is for colors, in Linux it's no groups
+  export LSCOLORS='Gxfxcxdxbxegedabagacad'
+#  Gx directory (bold cyan)
+#    fx symlink (magenta)
+#      cx socket (green)
+#        dx pipe (brown)
+#          bx exec (red)
+#            eg block special (blue on cyan)
+#              ed char special (blue on brown)
+#                ab exec w/ setuid (black on red)
+#                  ag exec w/ setgid (black on cyan)
+#                    ac dir writable to others w/ sticky (black on green)
+#                      ad dir writable to others w/o sticky (black on brown)
 fi
 
 # Setup some colors to use later in interactive shell or scripts
@@ -81,18 +94,18 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
   # Get it here: http://www.caliban.org/bash/index.shtml#completion) or 
   # on OSX: sudo port install bash-completion
   if [ -f /etc/bash_completion ]; then
-      . /etc/bash_completion
+   #. /etc/bash_completion
+    . /etc/profile.d/bash_completion.sh
+    # Add completion to source and .
+    # complete -F _command source 
+    # complete -F _command .
   fi
   if [ -f /opt/local/etc/bash_completion ]; then
     . /opt/local/etc/bash_completion
+    # Add completion to source and .
+    # complete -F _command source 
+    # complete -F _command .
   fi
-
-  # git completion
-  source ~/cl/bin/git-completion.bash
-
-  # Add completion to source and .
-  complete -F _command source 
-  complete -F _command .
 
 
 
@@ -102,27 +115,35 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
   #}
 
   prompt_func() {
-      previous_return_value=$?;
-      if [ $IS_REMOTE = 'true' ] ; then
-        prompt="\[\033]0;${USER} ${PWD}\007\]\[${COLOR_PURPLE}\]\w\[${COLOR_GRAY}\]$(__git_ps1)\[${COLOR_NC}\] "
-      else
-        prompt="\[\033]0;${USER} ${PWD}\007\]\[${COLOR_GREEN}\]\w\[${COLOR_GRAY}\]$(__git_ps1)\[${COLOR_NC}\] "
-      fi
-      #prompt="\033]0;${PWD}\007\[${COLOR_GREEN}\]\w\[${COLOR_GRAY}\]$(__git_ps1)\[${COLOR_NC}\] "
-      #prompt="\[${COLOR_GREEN}\]\w\[${COLOR_GRAY}\]$(__git_ps1)\[${COLOR_YELLOW}\]$(git_dirty_flag)\[${COLOR_NC}\] "
+    previous_return_value=$?;
+    
+    if [ "${USER}" == "root" ]; then
+      prompt_username="\[${COLOR_LIGHT_RED}\]\u"
+      prompt_char="#"
+    else
+      prompt_username="\[${COLOR_LIGHT_CYAN}\]\u"
+      prompt_char="\$"
+    fi
 
-      if test $previous_return_value -eq 0
-      then
-          PS1="${prompt}> "
-      else
-          PS1="${prompt}\[${COLOR_RED}\]> \[${COLOR_NC}\]"
-      fi
+    if [ $IS_REMOTE = 'true' ] ; then
+      prompt="\[${COLOR_PURPLE}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_PURPLE}\]\W\[${COLOR_GRAY}\]$(__git_ps1) ${prompt_username}\[${COLOR_NC}\]"
+    else
+      prompt="\[${COLOR_CYAN}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_CYAN}\]\W\[${COLOR_GRAY}\]$(__git_ps1) ${prompt_username}\[${COLOR_NC}\]"
+    fi
+
+    if test $previous_return_value -eq 0
+    then
+      PS1="${prompt}${prompt_char} "
+    else
+      PS1="${prompt}\[${COLOR_RED}\]${prompt_char} \[${COLOR_NC}\]"
+    fi
   }
   PROMPT_COMMAND=prompt_func
 
   # export PS1="\[${COLOR_GREEN}\]\w\[${COLOR_NC}\] > "  # Primary prompt with only a path
   # export PS1="\[${COLOR_RED}\]\w > \[${COLOR_NC}\]"  # Primary prompt with only a path, for root, need condition to use this for root
   # export PS1="\[${COLOR_GRAY}\]\u@\h \[${COLOR_GREEN}\]\w > \[${COLOR_NC}\]"  # Primary prompt with user, host, and path 
+  
   # This runs before the prompt and sets the title of the xterm* window.  If you set the title in the prompt
   # weird wrapping errors occur on some systems, so this method is superior
   #export PROMPT_COMMAND='echo -ne "\033]0;${PWD##*/} ${USER}@${HOSTNAME%%.*}"; echo -ne "\007"'  # user@host path
@@ -145,15 +166,31 @@ alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 cl() { cd $1; ls -la; } 
 
-source ~/cl/bin/bashmarks.sh
+source ~/.bin/bashmarks.sh
+# I got the following from, and mod'd it: http://www.macosxhints.com/article.php?story=20020716005123797
+#    The following aliases (save & show) are for saving frequently used directories
+#    You can save a directory using an abbreviation of your choosing. Eg. save ms
+#    You can subsequently move to one of the saved directories by using cd with
+#    the abbreviation you chose. Eg. cd ms  (Note that no '$' is necessary.)
+if [ ! -f ~/.dirs ]; then  # if doesn't exist, create it
+  touch ~/.dirs
+fi
+
+alias show='cat ~/.dirs'
+save (){
+  command sed "/!$/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ; 
+}  #"
+source ~/.dirs  # Initialization for the above 'save' facility: source the .sdirs file 
+shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
 
 
 
 # Editors ----------------------------------------------------------
-#export EDITOR='mate -w'  # OS-X SPECIFIC - TextMate, w is to wait for TextMate window to close
+export EDITOR='mate -w'  # OS-X SPECIFIC - TextMate, w is to wait for TextMate window to close
 #export EDITOR='gedit'  #Linux/gnome
-export EDITOR='vim'  #Command line
+#export EDITOR='vim'  #Command line
 export GIT_EDITOR='vim'
+export SVN_EDITOR='vim'
 #alias gvim='/Applications/MacVim.app/Contents/MacOS/vim -g'
 
 if [ "$OS" = "darwin" ] ; then
@@ -197,7 +234,6 @@ monitor_traffic(){
 
 
 
-
 # Other aliases ----------------------------------------------------
 alias ll='ls -hl'
 alias la='ls -a'
@@ -229,9 +265,11 @@ else
 fi
 
 
+# For Memcached
+export EVENT_NOKQUEUE=1
 
 # Misc
-alias reloadbash='source ~/cl/etc/bash_profile'
+alias reloadbash='source ~/.bash_profile'
 
 alias ducks='du -cksh * | sort -rn|head -11' # Lists folders and files sizes in the current folder
 alias m='more'
@@ -283,11 +321,15 @@ alias spin_kicker="kicker -r rails -b 'spin push'"
 # Bring in the other files ----------------------------------------------------
 if [ $IS_INTERACTIVE = 'true' ] ; then
   source ~/.bashrc_help
-
-  source ~/cl/bin/mq/mq.sh # MySQL tools
-  source ~/cl/bin/rr/rr.sh # Rails tools
-  source ~/cl/bin/gt/gt.sh # Git tools
-  source ~/cl/bin/sv/sv.sh # SVN tools
+  
+  if [ -e ~/.bash_profile_local ]; then
+    source ~/.bash_profile_local
+  fi
+  
+  source ~/.bin/mq/mq.sh # MySQL tools
+  source ~/.bin/rr/rr.sh # Rails tools
+  source ~/.bin/gt/gt.sh # Git tools
+  source ~/.bin/sv/sv.sh # SVN tools
 fi
 
 if [ -f ~/.bashrc_local ]; then
