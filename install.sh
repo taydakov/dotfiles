@@ -29,16 +29,41 @@ else
   symlink $DIR/etc/bashrc ~/.bashrc
   symlink $DIR/etc/bashrc_help ~/.bashrc_help
   symlink $DIR/etc/bashrc_app_specific ~/.bashrc_app_specific
-
-  # vim
-  symlink $DIR/etc/vim/vimrc ~/.vimrc
-  symlink $DIR/etc/vim/gvimrc ~/.gvimrc
-  symlink $DIR/etc/vim ~/.vim
+  if [ ! -f ~/.bashrc_local ]; then
+    # never overwrite an existing .bashrc_local file with the example!
+    symlink $DIR/etc/bashrc_local_example ~/bashrc_local
+  fi
 
   # git
   symlink $DIR/etc/gitconfig ~/.gitconfig
   symlink $DIR/etc/gitignore ~/.gitignore
   symlink $DIR/etc/gitattributes ~/.gitattributes
+
+  # git bash completion
+  if [ -n $BASH_COMPLETION_DIR ] && [ ! -f $BASH_COMPLETION_DIR/git-completion.bash ]; then
+    GIT_PATH=`which git`
+    if [ -n $GIT_PATH ]; then
+      GIT_PATH="${GIT_PATH/bin\/git/}"
+      GIT_COMPLETION_FILE="$GIT_PATH""share/git-core/git-completion.bash"
+    fi
+    # symlink git-completion.bash into the bash_completion.d directory
+    if [ -d $BASH_COMPLETION_DIR ] && [ -w $BASH_COMPLETION_DIR ] && [ -n $GIT_COMPLETION_FILE ]; then
+      symlink $GIT_COMPLETION_FILE $BASH_COMPLETION_DIR/git-completion.bash
+    else
+      echo "Automatic symlinking of \"git-completion.bash\" into your \"bash_completion.d\" directory failed"
+      if [ -d $BASH_COMPLETION_DIR ] && [ -n $GIT_COMPLETION_FILE ]; then
+        echo "Please run this command (as sudo) to create the necessary symlink:"
+        echo "  sudo ln -s $GIT_COMPLETION_FILE $BASH_COMPLETION_DIR"
+      else
+        echo "Please ensure that both \"bash_completion\" & \"git\" are installed & then manually create this symlink to avoid error messages"
+      fi
+    fi
+  fi
+
+  # vim
+  symlink $DIR/etc/vim/vimrc ~/.vimrc
+  symlink $DIR/etc/vim/gvimrc ~/.gvimrc
+  symlink $DIR/etc/vim ~/.vim
 
   # misc
   symlink $DIR/etc/subversion ~/.subversion

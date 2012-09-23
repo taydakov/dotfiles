@@ -1,0 +1,7 @@
+export PATH=/usr/local/bin:$PATH
+
+if echo $rvm_ruby_version | grep -q '1.9'; then
+  export RUBYOPT='-r openssl'
+else
+  export RUBYOPT=
+fi
