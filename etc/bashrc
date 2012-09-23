@@ -106,6 +106,12 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
     # complete -F _command source 
     # complete -F _command .
   fi
+  if [ -f /usr/local/etc/bash_completion ]; then
+    . /usr/local/etc/bash_completion
+    # Add completion to source and .
+    # complete -F _command source 
+    # complete -F _command .
+  fi
 
 
 
