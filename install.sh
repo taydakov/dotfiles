@@ -13,7 +13,7 @@ else
 
       # create symlink only if target doesn't exist (e.g. if the user declined deletion)
       if [ ! -e $2 ]; then
-        ln -s $1 $2
+        ln -is $1 $2
       fi
     fi
   }
