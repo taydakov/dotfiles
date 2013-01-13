@@ -106,7 +106,7 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
     # complete -F _command source 
     # complete -F _command .
   fi
-  if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  if [ "$OS" = "darwin" ] && [ -f $(brew --prefix)/etc/bash_completion ]; then
     . $(brew --prefix)/etc/bash_completion
     # Add completion to source and .
     # complete -F _command source 
