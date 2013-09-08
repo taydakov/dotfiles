@@ -89,7 +89,8 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
 
 
   # Completion -------------------------------------------------------
-
+  
+	GIT_PS1=""
   # Turn on advanced bash completion if the file exists 
   # Get it here: http://www.caliban.org/bash/index.shtml#completion) or 
   # on OSX: sudo port install bash-completion
@@ -99,18 +100,21 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
     # Add completion to source and .
     # complete -F _command source 
     # complete -F _command .
+		GIT_PS1="__git_ps1"
   fi
   if [ -f /opt/local/etc/bash_completion ]; then
     . /opt/local/etc/bash_completion
     # Add completion to source and .
     # complete -F _command source 
     # complete -F _command .
+		GIT_PS1="__git_ps1"
   fi
   if [ "$OS" = "darwin" ] && [ -f $(brew --prefix)/etc/bash_completion ]; then
     . $(brew --prefix)/etc/bash_completion
     # Add completion to source and .
     # complete -F _command source 
     # complete -F _command .
+		GIT_PS1="__git_ps1"
   fi
 
 
@@ -132,9 +136,9 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
     fi
 
     if [ $IS_REMOTE = 'true' ] ; then
-      prompt="\[${COLOR_PURPLE}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_PURPLE}\]\W\[${COLOR_GRAY}\]$(__git_ps1) ${prompt_username}\[${COLOR_NC}\]"
+      prompt="\[${COLOR_PURPLE}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_PURPLE}\]\W\[${COLOR_GRAY}\]$($GIT_PS1) ${prompt_username}\[${COLOR_NC}\]"
     else
-      prompt="\[${COLOR_CYAN}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_CYAN}\]\W\[${COLOR_GRAY}\]$(__git_ps1) ${prompt_username}\[${COLOR_NC}\]"
+      prompt="\[${COLOR_CYAN}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_CYAN}\]\W\[${COLOR_GRAY}\]$($GIT_PS1) ${prompt_username}\[${COLOR_NC}\]"
     fi
 
     if test $previous_return_value -eq 0
