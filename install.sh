@@ -31,7 +31,7 @@ else
   symlink $DIR/etc/bashrc_app_specific ~/.bashrc_app_specific
   if [ ! -f ~/.bashrc_local ]; then
     # never overwrite an existing .bashrc_local file with the example!
-    symlink $DIR/etc/bashrc_local_example ~/bashrc_local
+    cp $DIR/etc/bashrc_local_example ~/.bashrc_local
   fi
 
   # git
@@ -46,8 +46,13 @@ else
       GIT_PATH="${GIT_PATH/bin\/git/}"
       GIT_COMPLETION_FILE="$GIT_PATH""share/git-core/git-completion.bash"
     fi
+		if [ ! -f $GIT_COMPLETION_FILE ] && [ "$OS" = "darwin" ]; then
+			# do something
+			GIT_COMPLETION_FILE="`mdfind -name 'git-completion.bash'`"
+			GIT_COMPLETION_FILE="${GIT_COMPLETION_FILE##*$'\n'}"
+		fi
     # symlink git-completion.bash into the bash_completion.d directory
-    if [ -d $BASH_COMPLETION_DIR ] && [ -w $BASH_COMPLETION_DIR ] && [ -n $GIT_COMPLETION_FILE ]; then
+    if [-n $BASH_COMPLETION_DIR ] && [ -d $BASH_COMPLETION_DIR ] && [ -w $BASH_COMPLETION_DIR ] && [ -f $GIT_COMPLETION_FILE ]; then
       symlink $GIT_COMPLETION_FILE $BASH_COMPLETION_DIR/git-completion.bash
     else
       echo "Automatic symlinking of \"git-completion.bash\" into your \"bash_completion.d\" directory failed"
