@@ -119,13 +119,23 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
 		# complete -F _command .
 		GIT_PS1="__git_ps1"
 	fi
-	if ! hash __git_ps1 2>/dev/null && [ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh ]; then
+	if ! hash __git_ps1 2>/dev/null; then
 		# Last resort!
-		. /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-		# Add completion to source and .
-		# complete -F _command source 
-		# complete -F _command .
-		GIT_PS1="__git_ps1"
+		if [ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh ]; then
+			. /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
+			# Add completion to source and .
+			# complete -F _command source 
+			# complete -F _command .
+			GIT_PS1="__git_ps1"
+		elif [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
+			. /usr/share/git-core/contrib/completion/git-prompt.sh
+			# Add completion to source and .
+			# complete -F _command source 
+			# complete -F _command .
+			GIT_PS1="__git_ps1"
+		else
+			GIT_PS1=""
+		fi
 	fi
 
 
