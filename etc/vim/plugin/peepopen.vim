@@ -34,7 +34,7 @@ command! PeepOpen :call <SID>LaunchPeepOpenViaVim()
 noremap <unique> <script> <Plug>PeepOpen <SID>Launch
 noremap <SID>Launch :call <SID>LaunchPeepOpenViaVim()<CR>
 
-if !hasmapto('<Plug>PeepOpen')
+if !hasmapto('<Plug>PeepOpen') && mapcheck('<Leader>p')
   map <unique> <silent> <Leader>p <Plug>PeepOpen
 endif
 
