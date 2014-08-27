@@ -200,10 +200,12 @@ imap aa @
 " |                              Plug-ins                                     |
 " -----------------------------------------------------------------------------  
 
+
 " NERDTree ********************************************************************
 :noremap <Leader>n :NERDTreeToggle<CR>
 let NERDTreeHijackNetrw=1 " User instead of Netrw when doing an edit /foobar
 let NERDTreeMouseMode=1 " Single click for everything
+let g:NERDTreeWinPos = "right"
 
 
 " NERD Commenter **************************************************************
