@@ -45,6 +45,7 @@ Plugin 'gmarik/Vundle.vim'
 
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'tpope/vim-surround'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -85,7 +86,7 @@ function! Tabstyle_spaces()
   set expandtab
 endfunction
 
-call Tabstyle_spaces()
+call Tabstyle_tabs()
 
 
 " Indenting *******************************************************************
@@ -135,7 +136,7 @@ set ruler " Show ruler
 
 
 " Line Wrapping ***************************************************************
-set nowrap
+"set nowrap
 set linebreak  " Wrap at word
 set whichwrap=b,s,h,l,<,>,[,]
 
@@ -238,8 +239,9 @@ imap aa @
 let NERDTreeHijackNetrw=1 " User instead of Netrw when doing an edit /foobar
 let NERDTreeMouseMode=1 " Single click for everything
 let g:NERDTreeWinPos = "right"
-map <Leader>n <plug>NERDTreeTabsToggle<CR>
 
+":map <Leader>n <plug>NERDTreeTabsToggle<CR>
+:map <Leader>n <plug>NERDTreeFocusToggle<CR>
 
 " NERD Commenter **************************************************************
 let NERDCreateDefaultMappings=0 " I turn this off to make it simple
