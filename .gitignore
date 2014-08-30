@@ -2,4 +2,5 @@
 bin/mate
 bin/_external
 etc/vim/.netrwhist
+etc/vim/sessions
 *.swp

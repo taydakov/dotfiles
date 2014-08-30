@@ -1,4 +1,4 @@
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 " |                            VIM Settings                                   |
 " |                   (see gvimrc for gui vim settings)                       |
 " |                                                                           |
@@ -24,7 +24,7 @@
 " |   :call Tabstyle_spaces = set tab to 2 spaces                             |
 " |                                                                           |
 " | Put machine/user specific settings in ~/.vimrc.local                      |
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 
 
 set nocompatible
@@ -34,33 +34,28 @@ imap jj <Esc> " Professor VIM says '87% of users prefer jj over esc', jj abrams 
 
 " Vundle **********************************************************************
 filetype off
-" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
+
+" Vundle 3rd-party Plugins ****************************************************
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'tpope/vim-surround'
+Bundle 'xolox/vim-misc'
+Bundle 'xolox/vim-session'
+call vundle#end()
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-"filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
+
+" Vundle Help *****************************************************************
 "
-" Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
 " see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
 
 " Tabs ************************************************************************
@@ -171,7 +166,7 @@ map <Enter> o<ESC>
 set sessionoptions=blank,buffers,curdir,folds,help,resize,tabpages,winsize
 
 
-" Invisible characters *********************************************************
+" Invisible characters ********************************************************
 set listchars=trail:.,tab:>-,eol:$
 set nolist
 :noremap <Leader>i :set list!<CR> " Toggle invisible chars
@@ -222,26 +217,23 @@ autocmd FileType c set omnifunc=ccomplete#Complete
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete 
 
 
-" Hard to type *****************************************************************
+" Hard to type ****************************************************************
 imap uu _
 imap hh =>
 imap aa @
 
 
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 " |                              Plug-ins                                     |
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 
 
 " NERDTree ********************************************************************
 :noremap <Leader>n :NERDTreeToggle<CR>
-":noremap <Leader>n :NERDTreeTabsToggle<CR>
 let NERDTreeHijackNetrw=1 " User instead of Netrw when doing an edit /foobar
 let NERDTreeMouseMode=1 " Single click for everything
 let g:NERDTreeWinPos = "right"
 
-":map <Leader>n <plug>NERDTreeTabsToggle<CR>
-:map <Leader>n <plug>NERDTreeFocusToggle<CR>
 
 " NERD Commenter **************************************************************
 let NERDCreateDefaultMappings=0 " I turn this off to make it simple
@@ -252,6 +244,10 @@ let NERDCreateDefaultMappings=0 " I turn this off to make it simple
 :map <Leader>c :call NERDComment(0, "toggle")<CR> 
 
 
+" NERDTree Tabs ***************************************************************
+:map <Leader>n <plug>NERDTreeFocusToggle<CR>
+
+
 " SnippetsEmu *****************************************************************
 "imap <unique> <C-j> <Plug>Jumper
 "let g:snip_start_tag = "_\."
@@ -260,7 +256,7 @@ let NERDCreateDefaultMappings=0 " I turn this off to make it simple
 "let g:snip_set_textmate_cp = '1'  " Tab to expand snippets, not automatically.
 
 
-" CommandT ********************************************************
+" CommandT ********************************************************************
   " To compile:
   " cd ~/cl/etc/vim/ruby/command-t
   " ruby extconf.rb
@@ -269,14 +265,14 @@ let g:CommandTMatchWindowAtTop = 1
 map <Leader>f :CommandT<CR>
 
 
-" fuzzyfinder ********************************************************
+" fuzzyfinder *****************************************************************
 " I'm using CommandT for main searching, but it doesn't do buffers, so I'm
 " using FuzzyFinder for that
 map <Leader>b :FufBuffer<CR>
 "let g:fuzzy_ignore = '.o;.obj;.bak;.exe;.pyc;.pyo;.DS_Store;.db'
 
 
-" autocomplpop ***************************************************************
+" autocomplpop ****************************************************************
 " complete option
 "set complete=.,w,b,u,t,k
 "let g:AutoComplPop_CompleteOption = '.,w,b,u,t,k'
@@ -286,15 +282,20 @@ let g:AutoComplPop_BehaviorKeywordLength = 2
 let g:AutoComplPop_NotEnableAtStartup = 1
 
 
-" railsvim ***************************************************************
+" railsvim ********************************************************************
 map <Leader>ra :AS<CR>
 map <Leader>rs :RS<CR>
 
 
-" -----------------------------------------------------------------------------  
+" vim-session *****************************************************************
+let g:session_autosave = 'yes'
+let g:session_autoload = 'yes'
+
+
+" -----------------------------------------------------------------------------
 " |                             OS Specific                                   |
 " |                      (GUI stuff goes in gvimrc)                           |
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 
 " Mac *************************************************************************
 "if has("mac") 
@@ -308,17 +309,17 @@ map <Leader>rs :RS<CR>
 
 
 
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 " |                               Startup                                     |
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 " Open NERDTree on start
 "autocmd VimEnter * exe 'NERDTree' | wincmd l 
 
 
 
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 " |                               Host specific                               |
-" -----------------------------------------------------------------------------  
+" -----------------------------------------------------------------------------
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif

@@ -10,3 +10,9 @@
 [submodule "etc/vim/bundle/vim-surround"]
 	path = etc/vim/bundle/vim-surround
 	url = git://github.com/tpope/vim-surround.git
+[submodule "etc/vim/bundle/vim-session"]
+	path = etc/vim/bundle/vim-session
+	url = git://github.com/xolox/vim-session.git
+[submodule "etc/vim/bundle/vim-misc"]
+	path = etc/vim/bundle/vim-misc
+	url = git://github.com/xolox/vim-misc.git
