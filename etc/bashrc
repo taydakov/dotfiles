@@ -85,6 +85,9 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
 	#set -o vi
 	#bind -m vi-command -r 'v'
 
+	bind '"\e[A":history-search-backward'
+	bind '"\e[B":history-search-forward'
+
 	shopt -s checkwinsize # After each command, checks the windows size and changes lines and columns
 
 
