@@ -344,6 +344,8 @@ alias cp_folder="cp -Rpv" #copies folder and all sub files and folders, preservi
 
 alias mirror_website="wget -m -x -p --convert-links --no-host-directories --no-cache -erobots=off"
 
+alias upchuck="ulimit -n 2048"
+
 killhard() {
 	kill -9 "$1"
 }
