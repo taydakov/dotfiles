@@ -85,6 +85,9 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
 	#set -o vi
 	#bind -m vi-command -r 'v'
 
+	bind '"\e[A":history-search-backward'
+	bind '"\e[B":history-search-forward'
+
 	shopt -s checkwinsize # After each command, checks the windows size and changes lines and columns
 
 
@@ -340,6 +343,8 @@ alias untar="tar xvzf"
 alias cp_folder="cp -Rpv" #copies folder and all sub files and folders, preserving security and dates
 
 alias mirror_website="wget -m -x -p --convert-links --no-host-directories --no-cache -erobots=off"
+
+alias upchuck="ulimit -n 2048"
 
 killhard() {
 	kill -9 "$1"

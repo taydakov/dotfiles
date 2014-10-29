@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "Current file descriptor limit: "`ulimit -n`
-ulimit -n 2048
-echo "New file descriptor limit: "`ulimit -n`
