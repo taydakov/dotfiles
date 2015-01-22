@@ -203,6 +203,11 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
 		echo -ne "\033]0;$1\007" 
 	}
 
+	function xtitleddir {    # open ~/dev/$1 directory and rename the title of current xterm* window
+		cd ~/dev/$1
+		xtitle $1
+	}
+
 fi
 
 
