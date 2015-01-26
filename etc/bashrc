@@ -163,7 +163,7 @@ if [ $IS_INTERACTIVE = 'true' ] ; then # Interactive shell only
 		if [ $IS_REMOTE = 'true' ] ; then
 			prompt="\[${COLOR_PURPLE}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_PURPLE}\]\W\[${COLOR_GRAY}\]$($GIT_PS1) ${prompt_username}\[${COLOR_NC}\]"
 		else
-			prompt="\[${COLOR_CYAN}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_CYAN}\]\W\[${COLOR_GRAY}\]$($GIT_PS1) ${prompt_username}\[${COLOR_NC}\]"
+			prompt="\[${COLOR_CYAN}\]\h\[${COLOR_NC}\]:\[${COLOR_LIGHT_CYAN}\]\W\[${COLOR_GREEN}\]$($GIT_PS1) ${prompt_username}\[${COLOR_NC}\]"
 		fi
 
 		if test $previous_return_value -eq 0
@@ -289,6 +289,8 @@ monitor_traffic(){
 alias ll='ls -hl'
 alias la='ls -a'
 alias lla='ls -lah'
+alias rm='rm -i'
+alias t='trash'
 
 # Search
 # Use ack for grepping and find if ack is available
