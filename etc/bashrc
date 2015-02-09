@@ -292,6 +292,12 @@ alias lla='ls -lah'
 alias rm='rm -i'
 alias t='trash'
 
+alias gs='git status'
+alias ga='git add -A'
+alias gb='git branch'
+alias gc='git commit'
+alias gcm='git commit -m'
+
 # Search
 # Use ack for grepping and find if ack is available
 # sudo port install p5-app-ack
