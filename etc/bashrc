@@ -297,6 +297,7 @@ alias ga='git add -A'
 alias gb='git branch'
 alias gc='git commit'
 alias gcm='git commit -m'
+alias gp='git push origin'
 
 # Search
 # Use ack for grepping and find if ack is available
