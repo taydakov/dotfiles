@@ -298,7 +298,8 @@ alias gb='git branch'
 alias gc='git commit'
 alias gcm='git commit -m'
 alias gd='git diff HEAD'
-alias gp='git push origin'
+alias gpush='git push'
+alias gpull='git pull --rebase'
 
 # Search
 # Use ack for grepping and find if ack is available
