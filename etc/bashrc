@@ -300,6 +300,7 @@ alias gcm='git commit -m'
 alias gd='git diff HEAD'
 alias gpush='git push'
 alias gpull='git pull --rebase'
+alias gl='git log --decorate --pretty --oneline --graph --all'
 
 # Search
 # Use ack for grepping and find if ack is available
