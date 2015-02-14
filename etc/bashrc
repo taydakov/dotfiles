@@ -298,8 +298,8 @@ alias gb='git branch'
 alias gc='git commit'
 alias gcm='git commit -m'
 alias gd='git diff HEAD'
-alias gpush='git push'
-alias gpull='git pull --rebase'
+alias gpush='git push --tag'
+alias gpull='git pull --tag --rebase'
 alias gl='git log --decorate --pretty --oneline --graph --all'
 
 # Search
